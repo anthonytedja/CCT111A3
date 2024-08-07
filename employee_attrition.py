@@ -20,7 +20,7 @@ df.drop(['EmployeeCount', 'EmployeeNumber', 'Over18',
 # Display the new first 5 rows of data
 df.head()
 
-# Count the number of employees who left and stayed
+# Count the number of employees who left vs stayed
 df['Attrition'].value_counts()
 
 # Convert 'Attrition' to binary equivalent
@@ -35,7 +35,6 @@ df['Attrition'] = df['Attrition'].apply(lambda x: 1 if x == 'Yes' else 0)
 attrition_by_job_role = df.groupby('JobRole')['Attrition'].mean().reset_index()
 attrition_by_job_role = attrition_by_job_role.sort_values(
     by='Attrition', ascending=False)
-
 # Display the first 5 rows of attrition rate by job role
 attrition_by_job_role.head()
 
@@ -99,14 +98,13 @@ plt.show()
 # Group by satisfaction / performance metrics and calculate the attrition rate for each group
 satisfaction_metrics = ['EnvironmentSatisfaction', 'JobSatisfaction',
                         'RelationshipSatisfaction', 'JobInvolvement', 'PerformanceRating', 'WorkLifeBalance']
-attrition_rates = df.groupby(satisfaction_metrics)[
+attrition_by_metrics = df.groupby(satisfaction_metrics)[
     'Attrition'].mean().reset_index()
-
 # Display the first 5 rows of attrition rate by satisfaction / performance metrics
-attrition_rates.head()
+attrition_by_metrics.head()
 
 # Melt the data to have metrics in a single column
-melted_attrition_rates = attrition_rates.melt(
+melted_attrition_rates = attrition_by_metrics.melt(
     id_vars='Attrition', value_vars=satisfaction_metrics, var_name='SatisfactionMetric', value_name='SatisfactionLevel')
 
 # Plot the attrition rate by satisfaction / performance metric
@@ -119,13 +117,11 @@ plt.title('Employee Attrition Rate by Various Performance & Satisfaction Metrics
 plt.legend(title='Satisfaction / Performance Metric')
 plt.show()
 
-
 # Analyze the attrition rate by business travel frequency and education field
 
 # Group by 'BusinessTravel' and 'EducationField' and calculate the attrition rate for each group
 attrition_by_travel_education = df.groupby(['BusinessTravel', 'EducationField'])[
     'Attrition'].mean().reset_index()
-
 # Display the first 5 rows of attrition rate by business travel frequency and education field
 attrition_by_travel_education.head()
 
